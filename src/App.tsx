@@ -110,26 +110,36 @@ const App = () => {
     const ascEW = calculateASC(lwrEW, qEW);
 
     setResults((prev) => ({
-      ns: { lwr: lwrNS, asc: ascNS, q: qNS, history: [
-        ...(prev.ns?.history || []),
-        {
-          time: timestamp,
-          scenario: globalTime,
-          density: Math.round(lwrNS.density),
-          queue: qNS,
-          greenTime: ascNS.greenTime,
-        }
-      ]},
-      ew: { lwr: lwrEW, asc: ascEW, q: qEW, history: [
-        ...(prev.ew?.history || []),
-        {
-          time: timestamp,
-          scenario: globalTime,
-          density: Math.round(lwrEW.density),
-          queue: qEW,
-          greenTime: ascEW.greenTime,
-        }
-      ]}
+      ns: {
+        lwr: lwrNS,
+        asc: ascNS,
+        q: qNS,
+        history: [
+          ...(prev.ns?.history || []),
+          {
+            time: timestamp,
+            scenario: globalTime,
+            density: Math.round(lwrNS.density),
+            queue: qNS,
+            greenTime: ascNS.greenTime,
+          },
+        ],
+      },
+      ew: {
+        lwr: lwrEW,
+        asc: ascEW,
+        q: qEW,
+        history: [
+          ...(prev.ew?.history || []),
+          {
+            time: timestamp,
+            scenario: globalTime,
+            density: Math.round(lwrEW.density),
+            queue: qEW,
+            greenTime: ascEW.greenTime,
+          },
+        ],
+      },
     }));
 
     // 4. Lock UI and Start Animation Loop
@@ -444,6 +454,16 @@ const App = () => {
                       value={Math.round(results.ns.lwr.density)}
                       unit="veh/km"
                       color="#1976d2"
+                      chipColor={
+                        results.ns.lwr.levelOfService === "A" ||
+                        results.ns.lwr.levelOfService === "B"
+                          ? "success"
+                          : results.ns.lwr.levelOfService === "C"
+                          ? "info"
+                          : results.ns.lwr.levelOfService === "D"
+                          ? "warning"
+                          : "error"
+                      }
                       chipLabel={`LOS: ${results.ns.lwr.levelOfService}`}
                     />
                     <Box sx={{ mt: 2 }}>
@@ -473,6 +493,16 @@ const App = () => {
                       value={Math.round(results.ew.lwr.density)}
                       unit="veh/km"
                       color="#9c27b0"
+                      chipColor={
+                        results.ew.lwr.levelOfService === "A" ||
+                        results.ew.lwr.levelOfService === "B"
+                          ? "success"
+                          : results.ew.lwr.levelOfService === "C"
+                          ? "info"
+                          : results.ew.lwr.levelOfService === "D"
+                          ? "warning"
+                          : "error"
+                      }
                       chipLabel={`LOS: ${results.ew.lwr.levelOfService}`}
                     />
                     <Box sx={{ mt: 2 }}>

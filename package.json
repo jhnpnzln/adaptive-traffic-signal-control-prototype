@@ -3,6 +3,11 @@
   "private": true,
   "version": "1.0.2",
   "type": "module",
+  "author": "JHNPNZLN",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jhnpnzln/adaptive-traffic-signal-control-prototype"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
