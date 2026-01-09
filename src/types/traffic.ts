@@ -1,7 +1,7 @@
 export type TimeOfDay = 'Morning' | 'Noon' | 'Afternoon';
 
 export interface TrafficInput {
-  timeOfDay: TimeOfDay;
+  timeOfDay?: TimeOfDay;
   observationTimeMinutes: number; // 1-5 minutes
   vehicleCount: number; 
   roadLengthKm: number; 

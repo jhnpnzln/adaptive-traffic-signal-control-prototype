@@ -5,6 +5,7 @@ import {
   Typography,
   Chip,
   Divider,
+  LinearProgress,
 } from "@mui/material";
 import { TrafficLight } from '../trafficLight/TrafficLight'; // Use the previous UI structure
 import type { ASCResult } from '../../types/traffic';
@@ -24,7 +25,11 @@ export const IntersectionController: React.FC<IntersectionControllerProps> = ({ 
   const [timer, setTimer] = useState(nsData.greenTime);
 
   useEffect(() => {
-    if (!active) return;
+    if (!active) {
+      setStage(0);
+      setTimer(nsData.greenTime);
+      return;
+    }
 
     const interval = setInterval(() => {
       setTimer((prev: number) => {
@@ -44,6 +49,14 @@ export const IntersectionController: React.FC<IntersectionControllerProps> = ({ 
 
     return () => clearInterval(interval);
   }, [active, stage, nsData, ewData]);
+
+  const getCurrentMax = () => {
+    if (stage === 0) return nsData.greenTime;
+    if (stage === 1) return nsData.amberTime;
+    if (stage === 2) return ewData.greenTime;
+    // if (stage === 3) return ewData.amberTime;
+    return ewData.amberTime;
+  }
 
   return (
     <>
@@ -90,6 +103,14 @@ export const IntersectionController: React.FC<IntersectionControllerProps> = ({ 
               : "EAST-WEST"
             : "the busier direction"}." 
         </Typography>
+        <Typography variant='caption' sx={{ color: 'gray', mb: 1, display: 'block', textAlign: 'center' }}>
+            PHASE PROGRESS: {stage ===0 || stage === 1 ? 'NS ACTIVE' : 'EW ACTIVE'}
+        </Typography>
+        <LinearProgress
+          variant="determinate"
+          value={(timer / getCurrentMax()) * 100}
+          sx={{ height: 10, borderRadius: 5, bgColor: '#333', '& .MuiLinearProgress-bar': { bgColor: '#90caf9' } }}
+        />
       </Box>
 
       <TrafficLight 

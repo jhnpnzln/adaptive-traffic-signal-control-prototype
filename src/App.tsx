@@ -31,6 +31,7 @@ import {
   calculateASC,
   KalmanFilter,
   generateDiagramData,
+  getScenarioMultiplier,
 } from "./utils";
 
 // Components
@@ -77,28 +78,61 @@ const App = () => {
     });
     const CAMERA_RANGE_KM = 0.5; // Constant 500m based on CCTV/YOLOv4 FOV
 
+    const multipliers = getScenarioMultiplier(globalTime);
+    // SAT
+    const nsAdjustedCount =
+      nsInput.vehicleCount * multipliers.demand +
+      Math.random() * 10 * multipliers.noise;
+    const ewAdjustedCount =
+      ewInput.vehicleCount * multipliers.demand +
+      Math.random() * 10 * multipliers.noise;
+
+    // 1. LWR
     const lwrNS = calculateLWR({
       ...nsInput,
-      timeOfDay: globalTime,
+      vehicleCount: nsAdjustedCount,
       roadLengthKm: CAMERA_RANGE_KM,
+      // timeOfDay: "Morning",
     });
-    const qNS = Math.round(kalmanNS.update(nsInput.vehicleCount * 0.3));
-    const ascNS = calculateASC(lwrNS, qNS);
-
     const lwrEW = calculateLWR({
       ...ewInput,
-      timeOfDay: globalTime,
+      vehicleCount: ewAdjustedCount,
       roadLengthKm: CAMERA_RANGE_KM,
+      // timeOfDay: "Morning",
     });
-    const qEW = Math.round(kalmanEW.update(ewInput.vehicleCount * 0.3));
+
+    // 2. KALMAN
+    const qNS = Math.round(kalmanNS.update(nsAdjustedCount * 0.3));
+    const qEW = Math.round(kalmanEW.update(ewAdjustedCount * 0.3));
+
+    // 3. ASC FUZZY
+    const ascNS = calculateASC(lwrNS, qNS);
     const ascEW = calculateASC(lwrEW, qEW);
 
     setResults((prev) => ({
-      ns: { lwr: lwrNS, asc: ascNS, q: qNS, history: [...(prev.ns?.history || []).slice(-9), { time: timestamp, density: Math.round(lwrNS.density), greenTime: ascNS.greenTime }] },
-      ew: { lwr: lwrEW, asc: ascEW, q: qEW, history: [...(prev.ew?.history || []).slice(-9), { time: timestamp, density: Math.round(lwrEW.density), greenTime: ascEW.greenTime }] },
+      ns: { lwr: lwrNS, asc: ascNS, q: qNS, history: [
+        ...(prev.ns?.history || []),
+        {
+          time: timestamp,
+          scenario: globalTime,
+          density: Math.round(lwrNS.density),
+          queue: qNS,
+          greenTime: ascNS.greenTime,
+        }
+      ]},
+      ew: { lwr: lwrEW, asc: ascEW, q: qEW, history: [
+        ...(prev.ew?.history || []),
+        {
+          time: timestamp,
+          scenario: globalTime,
+          density: Math.round(lwrEW.density),
+          queue: qEW,
+          greenTime: ascEW.greenTime,
+        }
+      ]}
     }));
 
-    // 2. Lock UI and Start Animation Loop
+    // 4. Lock UI and Start Animation Loop
     setIsSimulating(true);
   };
 
@@ -111,7 +145,11 @@ const App = () => {
   return (
     <Box sx={{ bgcolor: "#f4f7f9", minHeight: "100vh" }}>
       {/* GLOBAL HEADER */}
-      <AppBar position="sticky" sx={{ bgcolor: "#1a237e", padding: 0 }} elevation={4}>
+      <AppBar
+        position="sticky"
+        sx={{ bgcolor: "#1a237e", padding: 0 }}
+        elevation={4}
+      >
         <Toolbar>
           <TrafficIcon sx={{ mr: 2 }} />
           <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: "bold" }}>
@@ -146,7 +184,12 @@ const App = () => {
       </AppBar>
 
       <Container maxWidth="xl" sx={{ mt: 4, width: "100%", px: 2 }}>
-        <Grid container rowSpacing={1} columns={12} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+        <Grid
+          container
+          rowSpacing={1}
+          columns={12}
+          columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+        >
           <Grid item size={{ xs: 12, md: 4 }}>
             <Box sx={{ position: "sticky", top: 0, zIndex: 10 }}>
               {/* RESEARCHER INPUT PANEL - NORTH-SOUTH */}
@@ -349,7 +392,6 @@ const App = () => {
                 </Button>
               </Grid>
             </Box>
-            
           </Grid>
 
           <Grid item size={{ xs: 12, md: 8 }}>
@@ -357,7 +399,11 @@ const App = () => {
             {results.ns && results.ew && (
               <>
                 {/* ANIMATED LIGHTS SIMULATION */}
-                <Grid item size={{ xs: 12, md: 12 }} sx={{ width: "100%", mb: 2 }}>
+                <Grid
+                  item
+                  size={{ xs: 12, md: 12 }}
+                  sx={{ width: "100%", mb: 2 }}
+                >
                   <Paper
                     sx={{
                       p: 3,
@@ -378,7 +424,14 @@ const App = () => {
                   </Paper>
                 </Grid>
 
-                <Grid item size={{ xs: 12, md: 12 }} flex={1} container spacing={2} sx={{ mt: 2 }}>
+                <Grid
+                  item
+                  size={{ xs: 12, md: 12 }}
+                  flex={1}
+                  container
+                  spacing={2}
+                  sx={{ mt: 2 }}
+                >
                   {/* DATA VISUALIZATION - NORTH-SOUTH */}
                   <Grid item size={{ xs: 12, md: 6 }}>
                     <Box sx={{ mb: 2, mt: 2 }}>
@@ -439,25 +492,44 @@ const App = () => {
                 </Grid>
               </>
             )}
-            {
-              !results.ns && !results.ew && (
-                <>
-                  <Grid item size={{ xs: 12, md: 12 }} sx={{ width: "100%", mb: 2 }}>
-                    <Skeleton variant="rectangular" width={934} height={328} />
+            {!results.ns && !results.ew && (
+              <>
+                <Grid
+                  item
+                  size={{ xs: 12, md: 12 }}
+                  sx={{ width: "100%", mb: 2 }}
+                >
+                  <Skeleton variant="rectangular" width={934} height={328} />
+                </Grid>
+                <Grid
+                  item
+                  size={{ xs: 12, md: 12 }}
+                  flex={1}
+                  container
+                  spacing={2}
+                  sx={{ mt: 2 }}
+                >
+                  <Grid item size={{ xs: 12, md: 6 }}>
+                    <Skeleton
+                      variant="rectangular"
+                      width={450}
+                      height={300}
+                      sx={{ mb: 2 }}
+                    />
+                    <Skeleton variant="rectangular" width={450} height={300} />
                   </Grid>
-                  <Grid item size={{ xs: 12, md: 12 }} flex={1} container spacing={2} sx={{ mt: 2 }}>
-                    <Grid item size={{ xs: 12, md: 6 }}>
-                      <Skeleton variant="rectangular" width={450} height={300} sx={{ mb: 2 }} />
-                      <Skeleton variant="rectangular" width={450} height={300} />
-                    </Grid>
-                    <Grid item size={{ xs: 12, md: 6 }}>
-                      <Skeleton variant="rectangular" width={450} height={300} sx={{ mb: 2 }} />
-                      <Skeleton variant="rectangular" width={450} height={300} />
-                    </Grid>
+                  <Grid item size={{ xs: 12, md: 6 }}>
+                    <Skeleton
+                      variant="rectangular"
+                      width={450}
+                      height={300}
+                      sx={{ mb: 2 }}
+                    />
+                    <Skeleton variant="rectangular" width={450} height={300} />
                   </Grid>
-                </>
-              )
-            }
+                </Grid>
+              </>
+            )}
           </Grid>
         </Grid>
       </Container>

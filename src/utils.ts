@@ -1,4 +1,4 @@
-import type { TrafficInput, LWRResult, ASCResult } from './types/traffic';
+import type { TrafficInput, LWRResult, ASCResult, TimeOfDay } from './types/traffic';
 
 // --- 1. LWR MODEL ---
 export const calculateLWR = (input: TrafficInput): LWRResult => {
@@ -115,4 +115,13 @@ export const generateDiagramData = (kj: number, vf: number) => {
     data.push({ density: k, flow: q, speed: v });
   }
   return data;
+};
+
+export const getScenarioMultiplier = (time: TimeOfDay) => {
+  switch (time) {
+    case "Morning": return { demand: 1.2, noise: 0.2 };
+    case "Noon": return { demand: 0.7, noise: 0.1 };
+    case "Afternoon": return { demand: 1.3, noise: 0.15 };
+    default: return { demand: 1.0, noise: 0.1 };
+  }
 };
