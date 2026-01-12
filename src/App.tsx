@@ -1,7 +1,6 @@
 import { useState } from "react";
 import {
   Container,
-  Grid,
   Box,
   AppBar,
   Toolbar,
@@ -12,6 +11,7 @@ import {
   TextField,
   Skeleton,
 } from "@mui/material";
+import Grid from '@mui/material/Grid'
 import {
   Traffic as TrafficIcon,
   Signpost as SignpostIcon,
@@ -196,10 +196,10 @@ const App = () => {
           columns={12}
           columnSpacing={{ xs: 1, sm: 2, md: 3 }}
         >
-          <Grid item size={{ xs: 12, md: 4 }}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Box sx={{ position: "sticky", top: 0, zIndex: 10 }}>
               {/* RESEARCHER INPUT PANEL - NORTH-SOUTH */}
-              <Grid item xs={12}>
+              <Grid size={{ xs: 12 }}>
                 <Paper sx={{ p: 3, borderLeft: "6px solid #1976d2" }}>
                   <Typography
                     variant="subtitle2"
@@ -210,7 +210,7 @@ const App = () => {
                     APPROACH FIXED DATA
                   </Typography>
                   <Grid container spacing={2}>
-                    <Grid item xs={6}>
+                    <Grid size={{xs: 6 }}>
                       <TextField
                         fullWidth
                         label="Vehicles (n)"
@@ -225,7 +225,7 @@ const App = () => {
                         size="small"
                       />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid size={{ xs:6 }}>
                       <TextField
                         fullWidth
                         label="Time (min)"
@@ -246,7 +246,7 @@ const App = () => {
                         ))}
                       </TextField>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid size={{ xs:6 }}>
                       <TextField
                         fullWidth
                         label="Jam Den. (kj)"
@@ -261,7 +261,7 @@ const App = () => {
                         size="small"
                       />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid size={{ xs:6 }}>
                       <TextField
                         fullWidth
                         label="Max Speed (vf)"
@@ -281,7 +281,7 @@ const App = () => {
               </Grid>
 
               {/* RESEARCHER INPUT PANEL - EAST-WEST */}
-              <Grid item xs={12} sx={{ mt: 3 }}>
+              <Grid size={{ xs: 12 }} sx={{ mt: 3 }}>
                 <Paper sx={{ p: 3, borderLeft: "6px solid #9c27b0" }}>
                   <Typography
                     variant="subtitle2"
@@ -292,7 +292,7 @@ const App = () => {
                     APPROACH FIXED DATA
                   </Typography>
                   <Grid container spacing={2}>
-                    <Grid item xs={6}>
+                    <Grid size={{ xs:6 }}>
                       <TextField
                         fullWidth
                         label="Vehicles (n)"
@@ -307,7 +307,7 @@ const App = () => {
                         size="small"
                       />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid size={{ xs:6 }}>
                       <TextField
                         fullWidth
                         select
@@ -328,7 +328,7 @@ const App = () => {
                         ))}
                       </TextField>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid size={{ xs:6 }}>
                       <TextField
                         fullWidth
                         label="Jam Den. (kj)"
@@ -343,7 +343,7 @@ const App = () => {
                         size="small"
                       />
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid size={{ xs:6 }}>
                       <TextField
                         fullWidth
                         label="Max Speed (vf)"
@@ -364,8 +364,7 @@ const App = () => {
 
               {/* SYNC TRIGGER */}
               <Grid
-                item
-                xs={12}
+                size={{ xs:12 }}
                 sx={{
                   display: "flex",
                   alignItems: "center",
@@ -400,13 +399,12 @@ const App = () => {
             </Box>
           </Grid>
 
-          <Grid item size={{ xs: 12, md: 8 }}>
+          <Grid size={{ xs: 12, md: 8 }}>
             {/* ANALYSIS DASHBOARD SECTION */}
             {results.ns && results.ew && (
               <>
                 {/* ANIMATED LIGHTS SIMULATION */}
                 <Grid
-                  item
                   size={{ xs: 12, md: 12 }}
                   sx={{ width: "100%", mb: 2 }}
                 >
@@ -431,7 +429,6 @@ const App = () => {
                 </Grid>
 
                 <Grid
-                  item
                   size={{ xs: 12, md: 12 }}
                   flex={1}
                   container
@@ -439,7 +436,7 @@ const App = () => {
                   sx={{ mt: 2 }}
                 >
                   {/* DATA VISUALIZATION - NORTH-SOUTH */}
-                  <Grid item size={{ xs: 12, md: 6 }}>
+                  <Grid size={{ xs: 12, md: 6 }}>
                     <Box sx={{ mb: 2, mt: 2 }}>
                       <ASCExplanation
                         text={`NS: ${results.ns.asc.logicExplanation}`}
@@ -478,7 +475,7 @@ const App = () => {
                   </Grid>
 
                   {/* DATA VISUALIZATION - EAST-WEST */}
-                  <Grid item size={{ xs: 12, md: 6 }}>
+                  <Grid size={{ xs: 12, md: 6 }}>
                     <Box sx={{ mb: 2, mt: 2 }}>
                       <ASCExplanation
                         text={`EW: ${results.ew.asc.logicExplanation}`}
@@ -521,21 +518,19 @@ const App = () => {
             {!results.ns && !results.ew && (
               <>
                 <Grid
-                  item
                   size={{ xs: 12, md: 12 }}
                   sx={{ width: "100%", mb: 2 }}
                 >
                   <Skeleton variant="rectangular" width={934} height={328} />
                 </Grid>
                 <Grid
-                  item
                   size={{ xs: 12, md: 12 }}
                   flex={1}
                   container
                   spacing={2}
                   sx={{ mt: 2 }}
                 >
-                  <Grid item size={{ xs: 12, md: 6 }}>
+                  <Grid size={{ xs: 12, md: 6 }}>
                     <Skeleton
                       variant="rectangular"
                       width={450}
@@ -544,7 +539,7 @@ const App = () => {
                     />
                     <Skeleton variant="rectangular" width={450} height={300} />
                   </Grid>
-                  <Grid item size={{ xs: 12, md: 6 }}>
+                  <Grid size={{ xs: 12, md: 6 }}>
                     <Skeleton
                       variant="rectangular"
                       width={450}

@@ -3,11 +3,11 @@ import {
   Paper,
   Typography,
   Divider,
-  Grid,
   TextField,
   MenuItem,
   Button,
 } from "@mui/material";
+import Grid from '@mui/material/Grid'
 import { DirectionsCar, Update } from "@mui/icons-material";
 import type { TrafficInput } from "../../types/traffic";
 
@@ -35,7 +35,7 @@ export const InputForm: React.FC<InputFormProps> = ({
       <Divider sx={{ mb: 2 }} />
 
       <Grid container spacing={2}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <TextField
             select
             fullWidth
@@ -50,7 +50,7 @@ export const InputForm: React.FC<InputFormProps> = ({
             <MenuItem value="Afternoon">Afternoon</MenuItem>
           </TextField>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <TextField
             fullWidth
             type="number"
@@ -61,7 +61,7 @@ export const InputForm: React.FC<InputFormProps> = ({
             size="small"
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={{ xs: 6 }}>
           <TextField
             fullWidth
             type="number"
@@ -72,7 +72,7 @@ export const InputForm: React.FC<InputFormProps> = ({
             size="small"
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={{ xs: 6 }}>
           <TextField
             fullWidth
             type="number"
@@ -83,7 +83,7 @@ export const InputForm: React.FC<InputFormProps> = ({
             size="small"
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={{ xs: 6 }}>
           <TextField
             fullWidth
             type="number"
@@ -94,7 +94,7 @@ export const InputForm: React.FC<InputFormProps> = ({
             size="small"
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={{ xs: 6 }}>
           <TextField
             fullWidth
             type="number"
