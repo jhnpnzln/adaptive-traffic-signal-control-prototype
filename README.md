@@ -9,33 +9,33 @@ This project/prototype was built using React + TypeScript + Vite for simulation.
 - Traffic moves freely
 - Cars can go at the speed limit
 - Little to no delay
-👉 Like driving on an empty road
+  - 👉 Like driving on an empty road
 
 ### LOS B – Good
 - Slightly more cars, but still smooth
 - Minor delays
-👉 Comfortable driving
+  - 👉 Comfortable driving
 
 ### LOS C – Fair
 - Noticeable traffic
 - Some delays, but acceptable
-👉 Typical city driving
+  - 👉 Typical city driving
 
 ### LOS D – Poor
 - Heavy traffic
 - Slower speeds and frequent delays
-👉 You start feeling frustrated
+  - 👉 You start feeling frustrated
 
 ### LOS E – Very Poor
 - Road is almost full
 - Very slow movement
 - Any small problem causes big delays
-👉 Traffic is on the edge of a jam
+  - 👉 Traffic is on the edge of a jam
 
 ### LOS F – Failure
 - Traffic jam
 - Stop-and-go or complete standstill
-👉 Bumper-to-bumper traffic
+  - 👉 Bumper-to-bumper traffic
 
 ### 🚗 Why LOS Is Important
 - Helps engineers design roads

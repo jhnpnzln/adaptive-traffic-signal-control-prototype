@@ -57,7 +57,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({
             {chipLabel && (
               <Chip
                 label={chipLabel}
-                color={chipColor}
+                color={chipColor || "default"}
                 size="small"
               />
             )}
