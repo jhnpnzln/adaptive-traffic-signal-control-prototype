@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Container,
   Grid,
@@ -11,8 +11,6 @@ import {
   MenuItem,
   TextField,
   Skeleton,
-  Chip,
-  Divider,
 } from "@mui/material";
 import {
   Traffic as TrafficIcon,
@@ -21,7 +19,6 @@ import {
 } from "@mui/icons-material";
 
 import type {
-  TrafficInput,
   LWRResult,
   ASCResult,
   TimeOfDay,
@@ -36,7 +33,6 @@ import {
 
 // Components
 import { StatsCard } from "./components/widgets/StatsCard";
-import { TrafficLight } from "./components/trafficLight/TrafficLight";
 import { ASCExplanation } from "./components/widgets/ASCExplanation";
 import { FundamentalDiagram } from "./components/charts/FundamentalDiagram";
 import { HistoryChart } from "./components/charts/HistoryChart";

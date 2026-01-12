@@ -1,4 +1,3 @@
-// src/components/IntersectionController.tsx
 import React, { useState, useEffect } from "react";
 import { Box, Typography, Chip, Divider, LinearProgress } from "@mui/material";
 import { TrafficLight } from "../trafficLight/TrafficLight"; // Use the previous UI structure
